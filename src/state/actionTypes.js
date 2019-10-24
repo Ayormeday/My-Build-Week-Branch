@@ -1,10 +1,10 @@
 export const SIGN_UP = "SIGN_UP";
 export const LOGIN = "LOGIN";
-export const LOGOUT = "LOGOUT";
 export const SET_LOADING = "SET_LOADING";
 export const ON_SIGNUP_INPUT_CHANGE = "ON_SIGNUP_INPUT_CHANGE";
 export const ON_LOGIN_INPUT_CHANGE = "ON_LOGIN_INPUT_CHANGE";
-export const ON_PLANTS_INPUT_CHANGE = "ON_PLANTS_INPUT_CHANGE";
-export const GET_PLANTS_LIST = "GET_PLANTS_LIST";
-export const SET_PLANTS_LIST = "SET_PLANTS_LIST";
 export const EDIT_PLANT = "EDIT_PLANT";
+export const ADD_PLANT = "ADD_PLANT";
+export const DELETE_PLANT = "DELETE_PLANT";
+export const LOGOUT = "LOGOUT";
+export const GET_PLANT = "GET_PLANT";

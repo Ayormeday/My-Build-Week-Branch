@@ -1,45 +1,31 @@
 import React from "react";
+import { connect } from "react-redux";
 import { Form, Field, withFormik } from "formik";
 import * as Yup from "yup";
 import styled from "styled-components";
-
 import ProfileCard from "./ProfileCard";
 import PlantCard from "./PlantCard";
 import UploadForm from './UploadForm'
-
 import wall from '../assets/wall.jpeg'
+import * as actionCreators from "../state/actionCreators";
 
-export const PlantList = ({ errors, touched, values, status }) => {
-
-  const plantList = [
-    {
-      username: 'robert',
-      phoneNumber: "+1 (509)991-1965",
-      password: 'password'
-    },
-    {
-      username: 'jonny',
-      phoneNumber: "+44 (209)801-1456",
-      password: 'asdf'
-    },
-    {
-      username: 'jill',
-      phoneNumber: "+20 (242)164-1854",
-      password: 'pass'
-    }
-  ];
-
+export const PlantList = ({ errors, plants, touched, values, status, addPlantToList, getPlantList}) => {
+  const handleSubmit = (e) =>{
+    e.preventDefault();
+    addPlantToList(values);
+    getPlantList()
+  }
   return (
     <>
       <ProfileStyle className="profile-form-wrapper">
         <ProfileCard />
         <PlantFormStyle className="add-plant-container">
           <h1>Add your plants here!</h1>
-          <Form className="form">
+          <Form className="form" onSubmit={handleSubmit}>
             <label>Nick Name:</label>
-            <Field type="text" name="nickName" placeholder="Nick Name" />
-            {touched.nickName && errors.nickName && (
-              <span className="error">{errors.nickName}</span>
+            <Field type="text" name="nickname" placeholder="Nick Name" />
+            {touched.nickname && errors.nickname && (
+              <span className="error">{errors.nickname}</span>
             )}
             <label>Species:</label>
             <Field type="text" name="species" placeholder="Species" />
@@ -61,9 +47,8 @@ export const PlantList = ({ errors, touched, values, status }) => {
       <PlantListStyle className="plant-list-container">
         <h1>Dont forget to water your plants!</h1>
         <div className='plant-grid'>
-          {plantList
-            ? plantList.map(plant => <PlantCard key={plant.id} plant={plant} />)
-            : null}
+          {plants.map(plant => <PlantCard key={plant.id} plant={plant} />)
+           }
         </div>
       </PlantListStyle>
     </>
@@ -71,23 +56,34 @@ export const PlantList = ({ errors, touched, values, status }) => {
 };
 
 const FormikPlantForm = withFormik({
-  mapPropsToValues({ nickName, species, h2oFrequency, image }) {
+  mapPropsToValues({ nickname, species, h2oFrequency}) {
     return {
-      nickName: nickName || "",
+      nickname: nickname || "",
       species: species || "",
       h2oFrequency: h2oFrequency || "",
-      image: image || ""
     };
   },
 
   validationSchema: Yup.object().shape({
-    NickName: Yup.string().required("Enter a name for your plant"),
+    nickname: Yup.string().required("Enter a name for your plant"),
     species: Yup.string().required("What species is your plant"),
     h2oFrequency: Yup.string().required("Dont forget to water your plant!")
   })
 })(PlantList);
-//!!! withFormik validation and Yup Error Messages //
-export default FormikPlantForm;
+
+const mapStateToProps = (state) => {
+  return {
+    plants: state.plantList,
+  }
+}
+
+
+export default connect(
+  mapStateToProps,
+  actionCreators
+)(FormikPlantForm);
+
+
 
 const ProfileStyle = styled.div`
 display: flex;
